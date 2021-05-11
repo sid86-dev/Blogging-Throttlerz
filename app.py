@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from flask_mail import Mail
+# from flask_mail import Mail
 import os
 import math
 import json
@@ -17,7 +17,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///codingthrottlerz.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = params['upload_location']
 db = SQLAlchemy(app)
-mail = Mail(app)
 
 
 class Contacts(db.Model):
@@ -47,18 +46,20 @@ def home():
     if (not str(page).isnumeric()):
         page = 1
     page = int(page)
-    posts = posts[(page-1)*int(params['no_of_posts']):(page-1)*int(params['no_of_posts'])+ int(params['no_of_posts'])]
-    if page==1:
+    posts = posts[(page-1)*int(params['no_of_posts']):(page-1)
+                  * int(params['no_of_posts']) + int(params['no_of_posts'])]
+    if page == 1:
         prev = "#"
-        next = "/?page="+ str(page+1)
-    elif page==last:
-        prev = "/?page="+ str(page-1)
+        next = "/?page=" + str(page+1)
+    elif page == last:
+        prev = "/?page=" + str(page-1)
         next = "#"
     else:
-        prev = "/?page="+ str(page-1)
-        next = "/?page="+ str(page+1)
-    
+        prev = "/?page=" + str(page-1)
+        next = "/?page=" + str(page+1)
+
     return render_template('home.html', params=params, posts=posts, prev=prev, next=next)
+
 
 @app.route('/about')
 def about():
@@ -84,10 +85,15 @@ def delete(sno):
 def uploader():
     if ('user' in session and session['user'] == params['admin_user']):
         if request.method == 'POST':
-            f = request.files['file1']
-            f.save(os.path.join(
-                app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-            return redirect('/dashboard')
+            try:
+                f = request.files['file1']
+                f.save(os.path.join(
+                    app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+                flash("Succesfully Uploaded", "success")
+                return redirect('/dashboard')
+            except Exception as e:
+                flash("Something went wrong", "danger")
+                return redirect('/dashboard')
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -135,6 +141,7 @@ def contact():
 
 @app.route("/edit/<string:sno>", methods=['GET', 'POST'])
 def edit(sno):
+    # flash("")
     if 'user' in session and session['user'] == params['admin_user']:
         if request.method == 'POST':
             box_title = request.form.get('title')
@@ -149,6 +156,7 @@ def edit(sno):
                              sub_title=box_sub_title, img_file=box_img_file, date=date)
                 db.session.add(post)
                 db.session.commit()
+                flash("Succesfully Uploaded", "success")
             else:
                 post = Posts.query.filter_by(sno=sno).first()
                 post.title = box_title
@@ -158,6 +166,7 @@ def edit(sno):
                 post.img_file = box_img_file
                 post.date = date
                 db.session.commit()
+                flash("Succesfully Edited", "success")
                 return redirect('/edit/'+sno)
 
         post = Posts.query.filter_by(sno=sno).first()
