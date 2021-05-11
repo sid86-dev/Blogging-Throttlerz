@@ -16,8 +16,13 @@
         </div>
     </div>
 </header>
+
 <!-- Main Content-->
 <div class="container">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>Heyy there!!</strong> This website is in it's developing stage so you might not access all the features.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             {% for post in posts %}
@@ -28,7 +33,7 @@
                 </a>
                 <p class="post-meta">
                     Posted by
-                    <a href="#!">Sid</a>
+                    <a href="#!">{{params['admin_user']}}</a>
                     on {{post.date}}
                 </p>
             </div>
@@ -36,12 +41,19 @@
             {% endfor %}
             <!-- Pager-->
             <div class="clearfix">
-                <a class="btn btn-dark float-left" href="{{prev}}">&larr;Older Post </a><a
-                    class="btn  btn-dark float-right" href="{{next}}"> Newer Post&rarr;</a>
+                <a  href="{{prev}}"> <button type="button" class="btn btn-dark float-left"
+                        data-bs-toggle="tooltip" data-bs-placement="bottom" title="Previous posts">
+                        &larr;Old Post
+                    </button> </a><a  href="{{next}}"><button type="button"
+                        class="btn btn-dark  float-right" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        title="Newer posts">
+                        New Post&rarr;
+                    </button></a>
             </div>
         </div>
     </div>
 </div>
+
 <hr />
 
 {% endblock %}

@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>{{params['page_title']}}</title>
-    <link rel={{ url_for('static', filename='icon" type="image/x-icon' )}}" href="assets/favicon.ico" />
+    <link rel={{ url_for('static', filename='icon" type="image/x-icon' )}}" href="assets/icon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -22,10 +23,58 @@
 
 <body>
 
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Direction to add post</h4>
+        <p>
+        <ul>
+            <li>First letter of the post title should be capitalized</li>
+            <li>Do not add spaces in your content. Spaces will be ignored when displayed</li>
+            <li>Slug should be in the form <p>xyz-blog</p>
+            </li>
+            <li>Enter the exact name of your image with the type extention
+                <p>xyz-bg.jpg</p>
+            </li>
+        </ul>
+        </p>
+        <hr>
+        <p class="mb-0">Whenever you need to, be sure to use acceptable language. If found violating terms or language, the post will be deleted!</p>
+    </div>
+
+
+    <hr>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </symbol>
+    </svg>
+
+
+    </div>
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24">
+            <use xlink:href="#check-circle-fill" />
+        </svg>&nbsp;&nbsp;&nbsp;
+        <div>
+           Successfully Uploaded
+        </div>
+
+    </div>
+
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <!-- Main Content-->
     <div class="container">
         <div class="row">
+
             <div class="col-lg-8 col-md-10 mx-auto">
+
+
                 <h1>ADD/EDIT POST</h1>
                 <a href="/dashboard">
 
