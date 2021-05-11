@@ -4375,7 +4375,6 @@ input[type=button].btn-block {
 .card > .list-group + .card-footer {
   border-top: 0;
 }
-
 .card-body {
   flex: 1 1 auto;
   min-height: 1px;
